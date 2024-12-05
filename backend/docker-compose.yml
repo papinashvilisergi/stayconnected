@@ -5,6 +5,8 @@ services:
     build:
       context: .
     container_name: django_web
+    networks: 
+      - app-network
     command: gunicorn cfcollab.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
@@ -25,6 +27,8 @@ services:
   nginx:
     image: nginx:latest
     container_name: nginx
+    networks: 
+      - app-network
     ports:
       - "80:80"
     volumes:
@@ -36,6 +40,9 @@ services:
   db:
     image: postgres:15
     container_name: postgres_db
+    networks: 
+      - app-network
+
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
@@ -46,3 +53,7 @@ services:
 volumes:
   static_volume:
   postgres_data:
+
+networks: 
+  app-network: 
+   driver: bridge   
