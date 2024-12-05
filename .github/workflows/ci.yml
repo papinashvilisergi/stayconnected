@@ -1,0 +1,67 @@
+name: CI for Frontend and Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          cd frontend-prod
+          npm install
+
+      - name: Build frontend
+        run: |
+          cd frontend-prod
+          npm run build
+
+      - name: Deploy frontend
+        run: |
+          # Push Docker image to your registry or deploy to DigitalOcean
+          docker build -t frontend-prod ./frontend-prod
+          docker run -d -p 80:80 frontend-prod
+
+  backend:
+    runs-on: ubuntu-latest
+    needs: frontend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          cd backend-prod
+          pip install -r requirements.txt
+
+      - name: Run migrations
+        run: |
+          cd backend-prod
+          python manage.py migrate
+
+      - name: Collect static files
+        run: |
+          cd backend-prod
+          python manage.py collectstatic --noinput
+
+      - name: Deploy backend
+        run: |
+          # Push Docker image to your registry or deploy to DigitalOcean
+          docker build -t backend-prod ./backend-prod
+          docker run -d -p 8000:8000 backend-prod
