@@ -3,13 +3,14 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm, Controller } from 'react-hook-form';
-import { loginType } from '../types/login.types';
+import { loginType, AxiosErrorResponse } from '@/types/types.ts';
 import { Link, useNavigate } from 'react-router-dom';
 import ScreenMd from '@/components/layout/page-containers/screen-md';
 import FormContainer from '@/components/layout/page-containers/form-container';
 import { useMutation } from '@tanstack/react-query';
 import { LoginUser } from '@/components/api/user';
 import { useSetAtom } from 'jotai';
+import { useState } from 'react';
 
 import { userAtom } from '@/store/auth';
 import { setAuthToken } from '@/components/api';
@@ -17,6 +18,7 @@ import { setAuthToken } from '@/components/api';
 const LoginPage = () => {
   const setuser = useSetAtom(userAtom);
   const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState<string>('');
   const {
     control,
     handleSubmit,
@@ -29,10 +31,14 @@ const LoginPage = () => {
     mutationKey: ['login'],
     mutationFn: LoginUser,
     onSuccess: (data) => {
-      console.log(data?.access);
       setAuthToken(data?.access);
       setuser(data);
       navigate('/home');
+    },
+    onError: (error: AxiosErrorResponse) => {
+      const errorMsg = Object.entries(error?.response.data);
+
+      setErrorMsg(String(errorMsg[0][1]));
     },
   });
 
@@ -56,14 +62,10 @@ const LoginPage = () => {
                   name='email'
                   control={control}
                   rules={{
-                    required: true,
+                    required: 'The field is empty.',
                     pattern: {
                       value: /\S+@\S+\.\S+/,
                       message: 'Entered value does not match email format',
-                    },
-                    minLength: {
-                      value: 10,
-                      message: 'min length is 10',
                     },
                   }}
                   render={({ field: { onChange, value } }) => {
@@ -89,10 +91,10 @@ const LoginPage = () => {
                   name='password'
                   control={control}
                   rules={{
-                    required: true,
+                    required: 'The field is empty.',
                     minLength: {
-                      value: 6,
-                      message: 'min length is 6',
+                      value: 8,
+                      message: 'min length is 8',
                     },
                   }}
                   render={({ field: { onChange, value } }) => {
@@ -110,6 +112,11 @@ const LoginPage = () => {
                 {errors.password && (
                   <span role='alert' className='pt-2 text-sm text-destructive'>
                     {String(errors.password.message)}
+                  </span>
+                )}
+                {errorMsg && (
+                  <span role='alert' className='pt-2 text-sm text-destructive'>
+                    {String(errorMsg)}
                   </span>
                 )}
               </div>

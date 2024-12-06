@@ -4,26 +4,39 @@ import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import ScreenLgHeader from '@/components/layout/page-containers/screen-lg-header';
-import { ChangeEvent, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { ChangeEvent, KeyboardEvent, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const Header: React.FC = () => {
-  const [searchKey, setSerachKey] = useState<string>('');
-
-  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const initialValue = searchParams.get('search')
+    ? searchParams.get('search')?.trim()
+    : '';
+  const [searchKey, setSearchKey] = useState<string>(String(initialValue));
   const navigate = useNavigate();
 
   const handleSearchText = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSerachKey(value);
+    setSearchKey(e.target.value);
   };
+
   const handleSearch = () => {
-    const searchPath =
-      location.search === ''
-        ? `?search=${searchKey}`
-        : `${location.search}&search=${searchKey}`;
-    navigate(searchPath);
+    const tags = searchParams.get('tags');
+    const queryString = [
+      searchKey.trim() ? `search=${encodeURIComponent(searchKey.trim())}` : '',
+      tags ? `tags=${tags}` : '',
+    ]
+      .filter(Boolean)
+      .join('&');
+
+    navigate(`/?${queryString}`);
   };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   return (
     <div className='border-border-soft border-b'>
       <ScreenLgHeader>
@@ -38,6 +51,7 @@ const Header: React.FC = () => {
               name='search'
               value={searchKey}
               onChange={handleSearchText}
+              onKeyDown={handleKeyDown} // Add this line
             />
             <Button variant='secondary' onClick={handleSearch}>
               <Search />

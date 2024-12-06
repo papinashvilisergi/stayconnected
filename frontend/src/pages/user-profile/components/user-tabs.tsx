@@ -3,19 +3,27 @@ import UserQuestionCards from '../../../components/ui-blocks/question-cards/ques
 import { User } from '../../../types/interfaces';
 import { PropsWithChildren } from 'react';
 import EmptyState from '@/components/ui-blocks/empty-state/empty-state';
+import AnswerCards from '@/components/ui-blocks/answer-cards/answer-cards';
+import { useParams } from 'react-router-dom';
+import { useAtomValue } from 'jotai';
+import { meAtom } from '@/store/auth';
 interface UserInfoProps {
   user: User;
 }
 const UserTabs: React.FC<PropsWithChildren<UserInfoProps>> = ({ user }) => {
+  const { userId } = useParams<{ userId: string }>();
+  const me = useAtomValue(meAtom);
+  const isCurrentUser = userId === String(me?.id);
+
   return (
     <div className='w-full'>
       <Tabs defaultValue='questions' className='w-full'>
-        <TabsList className='w-full'>
+        <TabsList className='flex h-auto flex-col sm:w-full sm:flex-row'>
           <TabsTrigger className='w-full' value='questions'>
-            My Questions
+            {isCurrentUser ? 'My Questions' : `Questions`}
           </TabsTrigger>
           <TabsTrigger className='w-full' value='answers'>
-            My Answers
+            {isCurrentUser ? 'My Answers' : `Answers`}
           </TabsTrigger>
         </TabsList>
         <TabsContent value='questions'>
@@ -24,7 +32,11 @@ const UserTabs: React.FC<PropsWithChildren<UserInfoProps>> = ({ user }) => {
               <UserQuestionCards questions={user.questions} />
             ) : (
               <EmptyState
-                title="You haven't asked any questions yet"
+                title={
+                  isCurrentUser
+                    ? "You haven't asked any questions yet"
+                    : `${user.fullname} hasn't asked any questions yet`
+                }
                 buttonTitle='Ask a Question'
                 to='/createQuestion'
               />
@@ -34,10 +46,14 @@ const UserTabs: React.FC<PropsWithChildren<UserInfoProps>> = ({ user }) => {
         <TabsContent value='answers'>
           <div className='my-8'>
             {user.answers.length > 0 ? (
-              <UserQuestionCards questions={user.questions} />
+              <AnswerCards answers={user.answers} />
             ) : (
               <EmptyState
-                title="You haven't answered any questions yet"
+                title={
+                  isCurrentUser
+                    ? "You haven't answered any questions yet"
+                    : `${user.fullname} hasn't answered any questions yet`
+                }
                 buttonTitle='Check recent questions'
                 to='/'
               />

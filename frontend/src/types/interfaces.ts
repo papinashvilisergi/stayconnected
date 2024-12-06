@@ -3,8 +3,10 @@ export interface Answer {
   questionId: string;
   description: string;
   author: string;
-  isCorrect: boolean;
+  is_correct: boolean;
   date: string;
+  text: string;
+  likes_count: number;
 }
 export interface Question {
   id: string;

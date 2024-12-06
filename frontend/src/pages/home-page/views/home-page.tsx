@@ -8,11 +8,16 @@ const HomePage = () => {
     <>
       <ScreenLg>
         <div className='grid gap-8 lg:grid-cols-3'>
-          <div className='space-y-8 lg:col-span-2'>
+          <div className='flex flex-col gap-4 lg:col-span-3'>
+            <p className='font-medium text-foreground'>Popular categories</p>
             <TagSelector />
+          </div>
+          <div className='lg:col-span-2'>
             <QuestionsList />
           </div>
-          <UserRating />
+          <div className='h-auto'>
+            <UserRating />
+          </div>
         </div>
       </ScreenLg>
     </>

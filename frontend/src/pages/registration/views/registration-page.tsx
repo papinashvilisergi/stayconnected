@@ -3,15 +3,25 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useForm, Controller } from 'react-hook-form';
-import { RegistrationType } from '../types/registration.types';
+import {
+  RegistrationType,
+  AxiosErrorResponse,
+  errorMsgType,
+} from '@/types/types.ts';
 import { Link } from 'react-router-dom';
 import ScreenMd from '@/components/layout/page-containers/screen-md';
 import FormContainer from '@/components/layout/page-containers/form-container';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/components/api/user';
 import SuccessMsg from './success-msg.tsx';
+import { useState } from 'react';
 
 const RegistrationPage = () => {
+  const [errorMsg, setErrorMsg] = useState<errorMsgType>({
+    email: '',
+    password: '',
+  });
+
   const {
     control,
     handleSubmit,
@@ -24,17 +34,41 @@ const RegistrationPage = () => {
       password: '',
       confirm_password: '',
     },
+    mode: 'onSubmit',
   });
   const { mutate: register, isSuccess } = useMutation({
     mutationKey: ['register'],
     mutationFn: registerUser,
+    onError: (error: AxiosErrorResponse) => {
+      const test = Object.entries(error?.response.data);
+
+      if (test.length == 2) {
+        setErrorMsg({
+          email: String(test[0][1]),
+          password: String(test[1][1]),
+        });
+      }
+      if (test.length < 2) {
+        if (test[0][0] === 'email') {
+          setErrorMsg({
+            email: String(test[0][1]),
+            password: '',
+          });
+        }
+        if (test[0][0] === 'password') {
+          setErrorMsg({
+            email: '',
+            password: String(test[0][1]),
+          });
+        }
+      }
+    },
   });
 
   const onSubmit = (fieldValues: RegistrationType) => {
-    console.log('clicked');
-
     register(fieldValues);
   };
+
   return (
     <>
       <ScreenMd>
@@ -55,16 +89,17 @@ const RegistrationPage = () => {
                     name='fullname'
                     control={control}
                     rules={{
-                      required: true,
+                      required: 'The field is empty.',
                       minLength: {
-                        value: 10,
-                        message: 'min length is 10',
+                        value: 1,
+                        message: 'The field is empty.',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
                       return (
                         <Input
                           onChange={onChange}
+                          minLength={1}
                           value={value}
                           className='mb-2 mt-2'
                           placeholder='Full Name'
@@ -87,14 +122,14 @@ const RegistrationPage = () => {
                     name='email'
                     control={control}
                     rules={{
-                      required: true,
+                      required: 'The field is empty.',
                       pattern: {
                         value: /\S+@\S+\.\S+/,
                         message: 'Entered value does not match email format',
                       },
                       minLength: {
-                        value: 10,
-                        message: 'min length is 10',
+                        value: 1,
+                        message: 'The field is empty.',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
@@ -116,6 +151,14 @@ const RegistrationPage = () => {
                       {String(errors.email.message)}
                     </span>
                   )}
+                  {errorMsg.email && (
+                    <span
+                      role='alert'
+                      className='pt-2 text-sm text-destructive'
+                    >
+                      {String(errorMsg.email)}
+                    </span>
+                  )}
                 </div>
                 <div className='mb-2 md:m-0'>
                   <Label htmlFor='password'>Password</Label>
@@ -123,10 +166,10 @@ const RegistrationPage = () => {
                     name='password'
                     control={control}
                     rules={{
-                      required: true,
+                      required: 'The field is empty.',
                       minLength: {
-                        value: 6,
-                        message: 'min length is 6',
+                        value: 8,
+                        message: 'min length is 8',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
@@ -149,6 +192,14 @@ const RegistrationPage = () => {
                       {String(errors.password.message)}
                     </span>
                   )}
+                  {errorMsg.password && (
+                    <span
+                      role='alert'
+                      className='pt-2 text-sm text-destructive'
+                    >
+                      {String(errorMsg.password)}
+                    </span>
+                  )}
                 </div>
                 <div>
                   <Label htmlFor='confirmPassword'>Confirm Password</Label>
@@ -156,7 +207,7 @@ const RegistrationPage = () => {
                     name='confirm_password'
                     control={control}
                     rules={{
-                      required: true,
+                      required: 'The field is empty.',
                       validate: (value) => {
                         if (watch('password') != value) {
                           return 'Your passwords do not match.';

@@ -9,6 +9,7 @@ import NotFound from '@/pages/not-found/not-found';
 import QuestionPage from '@/pages/question-page/views/question-page';
 import RegistrationPage from '@/pages/registration/views/registration-page';
 import MyProfile from '@/pages/user-profile/views/my-profile-page';
+import UserProfile from '@/pages/user-profile/views/user-profile-page';
 import { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
@@ -50,12 +51,12 @@ const MainRoutes = () => {
               </LogoutGuard>
             }
           />
+          <Route path='profile/:userId' element={<UserProfile />} />
           <Route
             path='createQuestion'
             element={
               <LogoutGuard>
                 <CreateQuestionPage />
-                //{' '}
               </LogoutGuard>
             }
           />
