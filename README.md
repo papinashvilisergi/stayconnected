@@ -84,39 +84,10 @@ docker exec backend_container python manage.py migrate
 docker exec -it backend_container python manage.py createsuperuser
 💡 Note: These commands should be run in the root folder (stayconnected/) where the docker-compose.yml file is located.
 
-📂 File Descriptions
-File/Folder	Description
-docker-compose.yml	Main Docker Compose file for all services
-nginx.conf	Nginx configuration for proxying requests to frontend and backend
-backend/	Django backend code and Dockerfile
-frontend/	React (Vite) frontend code and Dockerfile
-backend/Dockerfile	Dockerfile for the Django backend
-frontend/Dockerfile	Dockerfile for the React frontend
-requirements.txt	Python dependencies for the backend
-package.json	NPM dependencies for the frontend
-📢 Key Ports
-Service	Port	Description
-Frontend	8080	React app (Vite)
-Backend	8000	Django API (Gunicorn)
-Nginx	80	Proxy for backend and frontend
-PostgreSQL	5432	Database for Django backend
-📊 Environment Variables
-Variable	Default Value	Required?
-SECRET_KEY	django-insecure-key	✅ Yes
-DEBUG	1 (for development)	✅ Yes
-DB_NAME	collabdb	✅ Yes
-DB_USER	postgres	✅ Yes
-DB_PASSWORD	postgres	✅ Yes
-DB_HOST	db	✅ Yes
-DB_PORT	5432	✅ Yes
-📸 Project Screenshots
-Add screenshots of the running app, like login, home page, etc.
 
 🧪 ტესტირება
 Run the following commands to check that everything is running smoothly.
 
-bash
-Copy code
 docker logs backend_container
 docker logs frontend_container
 docker logs nginx_container
@@ -154,9 +125,18 @@ python manage.py createsuperuser	Create an admin superuser
 📄 License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-🙏 კონტრიბუტორები
-Your Name - სერგი პაპინაშვილი
-Other Contributors - გივი, შაფაქიძე Team Developers
+🙏 კონტრიბუტორები D
+DevOps - სერგი პაპინაშვილი, გივი შაფაქიძე
+Team Developers >>> 
+React სოფიკო იმნაიშვილი (TEAM LEAD)
+React ანა ჟუჟუნაშვილი
+React თორნიკე  სამხარაძე
+React დავით ნანავა
+Python advance	გეგა თვარაძე
+Python advance	გიორგი მაისურაძე
+iOS	სანდრო მარანელი
+iOS	ილიკო კუკავა
+
 ⭐ ფიდბექები
 If you have any issues or questions, feel free to create a GitHub issue or submit a pull request.
 
