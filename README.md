@@ -25,6 +25,28 @@ python manage.py makemigrations
 # 6. ვადასტურებთ მიგრაციებს
 python manage.py migrate
 
+
+for dockerized version (backend)
+# Stop everything
+docker compose down --volumes --remove-orphans
+
+# Rebuild everything
+docker compose build
+
+# Start all services
+docker compose up -d
+
+# Check container logs
+docker logs backend_container
+
+# Apply migrations
+docker exec backend_container python manage.py makemigrations
+docker exec backend_container python manage.py migrate
+
+# Create superuser (optional)
+docker exec -it backend_container python manage.py createsuperuser
+
+
 # 7. ვუშვებთ ჯანგოს დეველოპმენტ სერვერს
 python manage.py runserver
 
