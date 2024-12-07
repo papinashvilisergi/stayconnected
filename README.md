@@ -4,7 +4,7 @@ StayConnected: Full-Stack Application
 📊 Monitoring: Prometheus
 🔄 CI/CD: GitHub Actions
 
-This project is a full-stack web application that integrates React (frontend) with Django (backend), all containerized using Docker. It also incorporates monitoring with Prometheus and CI/CD using GitHub Actions.
+
 ეს არის სრულ სტეკზე მომუშავებ ვებ აპლიკაცია რეაქტზე და ჯანგოზე, სურვილისამებრ დოკერზე და ასევე გვაქვს მონიტორინგის სისტემა სერვერზე.
 
 
