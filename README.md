@@ -1,25 +1,36 @@
-StayConnected: Full-Stack Application
-🚀 Frontend: React (Vite)
-⚙️ Backend: Django (Gunicorn)
-📊 Monitoring: Prometheus
-🔄 CI/CD: GitHub Actions
+# 📡 **StayConnected: Full-Stack Application**
 
+🚀 **Frontend**: React (Vite)  
+⚙️ **Backend**: Django (Gunicorn)  
+📊 **Monitoring**: Prometheus  
+🔄 **CI/CD**: GitHub Actions  
 
-ეს არის სრულ სტეკზე მომუშავებ ვებ აპლიკაცია რეაქტზე და ჯანგოზე, სურვილისამებრ დოკერზე და ასევე გვაქვს მონიტორინგის სისტემა სერვერზე.
+StayConnected is a full-stack web application powered by React and Django. It supports containerized deployment using Docker and features a robust monitoring system with Prometheus. This guide covers how to run the application both with and without Docker.
 
+---
 
-⚙️ გამოყენებული ტექნოლოგიები
-Frontend	React (Vite) - მხოლოდ API-ს დონეზე.
-Backend	Django (Gunicorn) - მხოლოდ API-ს დონეზე.
-Database	PostgreSQL - ინიციალიზაციის დონეზე.
-Proxy	Nginx - დასაჰოსტად.
-კონტეინერიზაციისთვის	Docker & Docker Compose
-მონიტორინგისთვის	Prometheus
-უწყვეთი ინტეგრაციისთვის	GitHub Actions
-🚀 პროექტის გაშვების ინსტრუქცია
-1️⃣ დოკერის გარეშე
-თუ გსურთ რომ ჩვენი პროექტი დოკერის გარეშე გაუშვათ, მაშინ მიჰყევით ქვედა ინსტრუქციას:
-🖥️ ბექენდის აწევა:
+## ⚙️ **Technologies Used**
+| **Component**       | **Technology**           |
+|---------------------|-------------------------|
+| **Frontend**        | React (Vite) - API-based |
+| **Backend**         | Django (Gunicorn) - API-based |
+| **Database**        | PostgreSQL               |
+| **Proxy**           | Nginx                    |
+| **Containerization**| Docker & Docker Compose  |
+| **Monitoring**      | Prometheus               |
+| **CI/CD**           | GitHub Actions           |
+
+---
+
+## 🚀 **Project Setup Instructions**
+### 1️⃣ **Without Docker**
+If you prefer to run the project **without Docker**, follow these instructions:
+
+### 🖥️ **Backend Setup**
+1. **Create a virtual environment**  
+   ```bash
+   python3 -m venv venv
+
 
 # 1️⃣ ვირტუალური გარემოს შექმნა
 python3 -m venv venv
