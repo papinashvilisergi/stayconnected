@@ -25,6 +25,12 @@ python manage.py makemigrations
 # 6. ვადასტურებთ მიგრაციებს
 python manage.py migrate
 
+# 7. ვუშვებთ ჯანგოს დეველოპმენტ სერვერს
+python manage.py runserver
+
+შემდგომ ფრონტდენს:
+npm install
+npm run dev
 
 for dockerized version (backend)
 # Stop everything
@@ -45,11 +51,3 @@ docker exec backend_container python manage.py migrate
 
 # Create superuser (optional)
 docker exec -it backend_container python manage.py createsuperuser
-
-
-# 7. ვუშვებთ ჯანგოს დეველოპმენტ სერვერს
-python manage.py runserver
-
-შემდგომ ფრონტდენს:
-npm install
-npm run dev
