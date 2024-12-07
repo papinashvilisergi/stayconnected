@@ -5,44 +5,26 @@ StayConnected: Full-Stack Application
 🔄 CI/CD: GitHub Actions
 
 This project is a full-stack web application that integrates React (frontend) with Django (backend), all containerized using Docker. It also incorporates monitoring with Prometheus and CI/CD using GitHub Actions.
+ეს არის სრულ სტეკზე მომუშავებ ვებ აპლიკაცია რეაქტზე და ჯანგოზე, სურვილისამებრ დოკერზე და ასევე გვაქვს მონიტორინგის სისტემა სერვერზე.
 
-🛠️ Project Structure
-lua
-Copy code
-stayconnected/
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   ├── manage.py
-│   └── cfcollab/
-├── frontend/
-│   ├── Dockerfile
-│   ├── vite.config.ts
-│   ├── package.json
-│   └── src/
-├── docker-compose.yml
-├── nginx.conf
-└── README.md
-⚙️ Technologies Used
-Service	Technology
-Frontend	React (Vite)
-Backend	Django (Gunicorn)
-Database	PostgreSQL
-Proxy	Nginx
-Containerization	Docker & Docker Compose
-Monitoring	Prometheus
-CI/CD	GitHub Actions
-🚀 How to Run the Project
-1️⃣ Running Without Docker
-If you prefer to run the backend and frontend without Docker, follow these instructions.
 
-🖥️ Backend Setup
-bash
-Copy code
-# 1️⃣ Create a virtual environment
+⚙️ გამოყენებული ტექნოლოგიები
+Frontend	React (Vite) - მხოლოდ API-ს დონეზე.
+Backend	Django (Gunicorn) - მხოლოდ API-ს დონეზე.
+Database	PostgreSQL - ინიციალიზაციის დონეზე.
+Proxy	Nginx - დასაჰოსტად.
+კონტეინერიზაციისთვის	Docker & Docker Compose
+მონიტორინგისთვის	Prometheus
+უწყვეთი ინტეგრაციისთვის	GitHub Actions
+🚀 პროექტის გაშვების ინსტრუქცია
+1️⃣ დოკერის გარეშე
+თუ გსურთ რომ ჩვენი პროექტი დოკერის გარეშე გაუშვათ, მაშინ მიჰყევით ქვედა ინსტრუქციას:
+🖥️ ბექენდის აწევა:
+
+# 1️⃣ ვირტუალური გარემოს შექმნა
 python3 -m venv venv
 
-# 2️⃣ Activate the virtual environment
+# 2️⃣ ვირტუალური გარემოს აქტივაცია
 source venv/bin/activate
 
 # 3️⃣ Upgrade pip (optional, but recommended)
@@ -51,7 +33,7 @@ pip install --upgrade pip
 # 4️⃣ Install dependencies
 pip install -r requirements.txt
 
-# 5️⃣ Make and apply migrations
+# 5️⃣ მიგრაციების შექმნა და დადასტურება
 python manage.py makemigrations
 python manage.py migrate
 
@@ -70,41 +52,35 @@ npm install
 npm run dev
 Once running, visit:
 
-Frontend: http://localhost:8080
-Backend: http://localhost:8000
-2️⃣ Running with Docker
+ფრონტის ბმული: http://localhost:8080
+ბექის ბმული: http://localhost:8000
+2️⃣ დოკერით გაშვების ინსტრუქცია
 Run frontend, backend, Nginx, and PostgreSQL services using Docker Compose.
 
-🚀 Full Dockerized Version
+🚀 სრული დოკერით გაშვების ინსტრუქცია
 Run the following commands from the root project directory (stayconnected/).
 
-bash
-Copy code
-# 1️⃣ Stop and clean up any previous containers, volumes, and networks
+
+# 1️⃣ Stop and clean up any previous containers, volumes, and networks  გამორთეთ და წაშალეთ წინა კონტეინერები, ვოლუმები და ქსელები
 docker compose down --volumes --remove-orphans
 
-# 2️⃣ Build Docker images for backend, frontend, and other services
+# 2️⃣ Build Docker images for backend, frontend, and other services დოკერ იმიჯის დაბილდვა ბექისთვის, ფრონტისთვის და სხვა სერვისებისთვის
 docker compose build
 
-# 3️⃣ Start the Docker containers in detached mode
+# 3️⃣ Start the Docker containers in detached mode დოკერის კონტეინერის გაშვება დეტაჩდ მოუდში.
 docker compose up -d
-🔍 Check Logs
-To view container logs, run:
+🔍 ლოგირება
+კონტეინერების ლოგების სანახავად:
 
-bash
-Copy code
 docker logs backend_container
 docker logs frontend_container
 docker logs nginx_container
 docker logs postgres_db
-📜 Run Database Migrations
-bash
-Copy code
+📜 მონაცემთა ბაის მიგრაციების გაშვება
 docker exec backend_container python manage.py makemigrations
 docker exec backend_container python manage.py migrate
 🗝️ Create Superuser (Optional)
-bash
-Copy code
+
 docker exec -it backend_container python manage.py createsuperuser
 💡 Note: These commands should be run in the root folder (stayconnected/) where the docker-compose.yml file is located.
 
@@ -136,7 +112,7 @@ DB_PORT	5432	✅ Yes
 📸 Project Screenshots
 Add screenshots of the running app, like login, home page, etc.
 
-🧪 Testing
+🧪 ტესტირება
 Run the following commands to check that everything is running smoothly.
 
 bash
@@ -147,11 +123,11 @@ docker logs nginx_container
 docker logs postgres_db
 If the backend is working, you should see:
 
-Backend: http://localhost:8000/admin/
-Frontend: http://localhost:8080
+ბექი: http://localhost:8000/admin/
+ფრონტი: http://localhost:8080
 Full App (via Nginx): http://localhost/
 🌐 CI/CD with GitHub Actions
-This project includes a GitHub Actions CI/CD pipeline.
+This project includes a GitHub Actions CI/CD pipeline.  
 Whenever you push to the main branch, the following tasks are triggered:
 
 ✅ Build & Test: Ensures the app builds without errors.
@@ -166,13 +142,7 @@ git commit -m "Deploy new changes"
 git push origin main
 You can find the GitHub Actions workflow in .github/workflows/ci.yml.
 
-🤔 Common Issues & Troubleshooting
-Problem	Solution
-502 Bad Gateway on http://localhost	Make sure the Nginx container is running and proxying correctly. Check docker logs nginx_container.
-Can't access localhost:8080	Ensure the Vite server is running (npm run dev) or check docker logs frontend_container.
-PostgreSQL connection error	Verify database container is up and accessible on port 5432. Check docker logs postgres_db.
-Error when running python manage.py	Make sure you have run migrations (python manage.py migrate).
-Nginx can't find static files	Run python manage.py collectstatic inside the container.
+
 📚 Useful Commands
 Command	Description
 docker ps	See all running containers
@@ -184,17 +154,17 @@ python manage.py createsuperuser	Create an admin superuser
 📄 License
 This project is licensed under the MIT License. See the LICENSE file for details.
 
-🙏 Contributors
-Your Name - Project Lead
-Other Contributors - Full-stack Developers
-⭐ Support & Feedback
+🙏 კონტრიბუტორები
+Your Name - სერგი პაპინაშვილი
+Other Contributors - გივი, შაფაქიძე Team Developers
+⭐ ფიდბექები
 If you have any issues or questions, feel free to create a GitHub issue or submit a pull request.
 
 This README.md is a comprehensive guide to help you set up, run, and troubleshoot the StayConnected project. Let me know if you'd like any edits, improvements, or additional details! 🚀
 
 
 
-
+ტექსტური ინსტრუქციები:
 # stayconnected
 ფრონტენდი   - React
 ბექენდი	    - Django
