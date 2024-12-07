@@ -101,21 +101,16 @@ Full App (via Nginx): http://localhost/
 This project includes a GitHub Actions CI/CD pipeline.  
 Whenever you push to the main branch, the following tasks are triggered:
 
-✅ Build & Test: Ensures the app builds without errors.
-✅ Run Lint Checks: Code is linted before deployment.
-✅ Run Tests: Ensures no tests fail before deploying.
-To trigger CI/CD, push to the main branch:
+✅ ბილდი და ტესტირება: ვრწმუნდებით რომ პროექტი ეშვება ხარვეზების გარეშე
+✅ Lint ტესტები: კოდი ილინტება დეფლოიმენტამდე
+✅ Run ტესტები: ვრწმუნდებით რომ არცერთი ხარვეზი არაა პროდაქშენზე გაშვებამდე
 
-bash
-Copy code
+საჭირო კომანდები:
+git pull
 git add .
 git commit -m "Deploy new changes"
 git push origin main
 You can find the GitHub Actions workflow in .github/workflows/ci.yml.
-
-
-📚 Useful Commands
-Command	Description
 docker ps	See all running containers
 docker logs backend_container	View backend container logs
 docker exec -it backend_container bash	Shell access into backend container
