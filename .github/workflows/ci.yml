@@ -1,101 +1,66 @@
-name: CI for Backend and Frontend
+name: CI/CD Workflow
 
 on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  frontend:
-    name: Frontend Build & Test
+  deploy:
+    name: Deploy to Production Server
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
-        working-directory: ./Sergi/frontend
-        run: |
-          npm ci
-
-      - name: Run Lint
-        working-directory: ./Sergi/frontend
-        run: |
-          npm run lint
-
-      - name: Run Tests
-        working-directory: ./Sergi/frontend
-        run: |
-          npm test -- --watchAll=false
-
-      - name: Build Frontend
-        working-directory: ./Sergi/frontend
-        run: |
-          npm run build
-
-  backend:
-    name: Backend Build & Test
-    runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: test_db
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U postgres"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
+    env:
+      SERVER_IP: 167.99.138.11
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v3
-        with:
-          python-version: '3.10'
+    - name: Sync Project to Server
+      run: |
+        rsync -avz --exclude 'node_modules' --exclude 'venv' ./ root@167.99.138.11:/root/stayconnected/
 
-      - name: Install Dependencies
-        working-directory: ./Sergi/backend
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r requirements.txt
+    - name: Install Frontend Dependencies
+      run: |
+        ssh -i /root/.ssh/ubuntu_server_key root@167.99.138.11 << 'EOF'
+          cd /root/stayconnected/frontend
+          if [ ! -d "node_modules" ]; then
+            npm install
+          fi
+          # Kill any existing process using port 8080
+          fuser -k 8080/tcp || true
+          pgrep -f "vite" || nohup npm run dev -- --port 8080 & disown
+        EOF
 
-      - name: Run Migrations
-        working-directory: ./Sergi/backend
-        env:
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
-        run: |
-          source venv/bin/activate
-          python manage.py migrate
+    - name: Install Backend Requirements
+      run: |
+        ssh -i /root/.ssh/ubuntu_server_key root@167.99.138.11 << 'EOF'
+          cd /root/stayconnected/backend
+          if [ -z "$VIRTUAL_ENV" ]; then
+            source venv/bin/activate
+          fi
+          pip freeze > /tmp/installed_requirements.txt
+          if ! diff /root/stayconnected/backend/requirements.txt /tmp/installed_requirements.txt; then
+            pip install -r /root/stayconnected/backend/requirements.txt
+          fi
+        EOF
 
-      - name: Run Lint
-        working-directory: ./Sergi/backend
-        run: |
-          source venv/bin/activate
-          flake8 .
+    - name: Start Backend Server
+      run: |
+        ssh -i /root/.ssh/ubuntu_server_key root@167.99.138.11 << 'EOF'
+          cd /root/stayconnected/backend
+          if [ -z "$VIRTUAL_ENV" ]; then
+            source venv/bin/activate
+          fi
+          # Kill any existing process using port 8000
+          fuser -k 8000/tcp || true
+          pgrep -f "manage.py runserver" || nohup python3 manage.py runserver 0.0.0.0:8000 & disown
+        EOF
 
-      - name: Run Tests
-        working-directory: ./Sergi/backend
-        env:
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_db
-        run: |
-          source venv/bin/activate
-          python manage.py test
+    - name: Start Frontend Server
+      run: |
+        ssh -i /root/.ssh/ubuntu_server_key root@167.99.138.11 << 'EOF'
+          cd /root/stayconnected/frontend
+          pgrep -f "vite" || nohup npm run dev -- --port 8080 & disown
+        EOF
