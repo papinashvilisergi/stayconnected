@@ -17,7 +17,7 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Allow requests from specific IP addresses, including 167.99.138.11
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '167.99.138.11', "*"]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '167.99.138.11']
 
 # Application definition
 INSTALLED_APPS = [
@@ -69,7 +69,6 @@ AUTH_USER_MODEL = 'user.CustomUser'
 
 WSGI_APPLICATION = 'cfcollab.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
@@ -83,7 +82,6 @@ DATABASES = {
         'PORT': config('DB_PORT', default=5432, cast=int),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -103,7 +101,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -114,7 +111,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
@@ -133,11 +129,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS configuration to allow access from specific IPs
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  
+    "http://localhost:3000",
     "http://localhost:8080",
     "http://192.168.0.6:8080",
-    "http://10.64.150.153:8080",  
-    "https://example-ios.com",  
+    "http://10.64.150.153:8080",
+    "https://example-ios.com",
     "http://167.99.138.11:80",
     "http://167.99.138.11:3000",
     "http://167.99.138.11:8080",  # Added this port for frontend
@@ -156,7 +152,6 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
-
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -166,15 +161,15 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),  # Set to 24 hours
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),   # Set to 7 days
-    'ROTATE_REFRESH_TOKENS': False,               # Optional: Refresh rotation behavior
-    'BLACKLIST_AFTER_ROTATION': True,             # Optional: Blacklist behavior
-    'ALGORITHM': 'HS256',                         # Algorithm used for signing
-    'SIGNING_KEY': SECRET_KEY,                    # Default secret key
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  # Set to 7 days
+    'ROTATE_REFRESH_TOKENS': False,  # Optional: Refresh rotation behavior
+    'BLACKLIST_AFTER_ROTATION': True,  # Optional: Blacklist behavior
+    'ALGORITHM': 'HS256',  # Algorithm used for signing
+    'SIGNING_KEY': SECRET_KEY,  # Default secret key
     'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),             # Authorization header prefix
-    'USER_ID_FIELD': 'id',                        # User model field for identification
-    'USER_ID_CLAIM': 'user_id',                   # JWT claim for user ID
+    'AUTH_HEADER_TYPES': ('Bearer',),  # Authorization header prefix
+    'USER_ID_FIELD': 'id',  # User model field for identification
+    'USER_ID_CLAIM': 'user_id',  # JWT claim for user ID
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
 }  # <-- This closing brace was missing previously
