@@ -1,10 +1,10 @@
-# Stage 1: Build the Vite frontend application
+# Base image
 FROM node:18-alpine AS build_image
 
 # Set working directory
 WORKDIR /app/react-app
 
-# Copy package.json and package-lock.json to install dependencies
+# Copy package.json and package-lock.json
 COPY package.json .
 
 # Install dependencies
@@ -13,18 +13,29 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
+
 # Build the application
 RUN npm run build
 
+# Production stage
+FROM node:18-alpine AS production_image
 
-# Stage 2: Production stage (Use Nginx to serve static files)
-FROM nginx:alpine AS production_image
+WORKDIR /app/react-app
 
-# Copy Vite build output from the build stage to Nginx's html directory
-COPY --from=build_image /app/react-app/dist /usr/share/nginx/html
+# Copy build output to nginx html directory
+COPY --from=BUILD_IMAGE /app/react-app/dist/ /app/react-app/dist
+EXPOSE 8080
 
-# Expose port 80 for Nginx
-EXPOSE 80
+COPY package.json .
+COPY vite.config.ts .
 
-# Default command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+RUN npm install typescript
+EXPOSE 8080
+CMD ["npm", "run", "preview"]
+
+# Copy custom nginx configuration if needed
+# Uncomment below lines to include custom nginx.conf
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+
+
