@@ -89,10 +89,10 @@ const RegistrationPage = () => {
                     name='fullname'
                     control={control}
                     rules={{
-                      required: 'The field is empty.',
+                      required: 'This field is required',
                       minLength: {
                         value: 1,
-                        message: 'The field is empty.',
+                        message: 'This field is required',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
@@ -122,14 +122,14 @@ const RegistrationPage = () => {
                     name='email'
                     control={control}
                     rules={{
-                      required: 'The field is empty.',
+                      required: 'This field is required',
                       pattern: {
                         value: /\S+@\S+\.\S+/,
-                        message: 'Entered value does not match email format',
+                        message: 'Please enter a valid email address',
                       },
                       minLength: {
                         value: 1,
-                        message: 'The field is empty.',
+                        message: 'This field is required',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
@@ -166,10 +166,11 @@ const RegistrationPage = () => {
                     name='password'
                     control={control}
                     rules={{
-                      required: 'The field is empty.',
+                      required: 'This field is required',
                       minLength: {
                         value: 8,
-                        message: 'min length is 8',
+                        message:
+                          'Your password must be at least 8 characters long',
                       },
                     }}
                     render={({ field: { onChange, value } }) => {
@@ -185,20 +186,15 @@ const RegistrationPage = () => {
                     }}
                   />
                   {errors.password && (
-                    <span
-                      role='alert'
-                      className='pt-2 text-sm text-destructive'
-                    >
+                    <p role='alert' className='pt-2 text-sm text-destructive'>
                       {String(errors.password.message)}
-                    </span>
+                    </p>
                   )}
                   {errorMsg.password && (
-                    <span
-                      role='alert'
-                      className='pt-2 text-sm text-destructive'
-                    >
-                      {String(errorMsg.password)}
-                    </span>
+                    <p role='alert' className='pt-2 text-sm text-destructive'>
+                      {/* {String(errorMsg.password)} */}
+                      This password is too common
+                    </p>
                   )}
                 </div>
                 <div>
@@ -207,10 +203,10 @@ const RegistrationPage = () => {
                     name='confirm_password'
                     control={control}
                     rules={{
-                      required: 'The field is empty.',
+                      required: 'This field is required',
                       validate: (value) => {
                         if (watch('password') != value) {
-                          return 'Your passwords do not match.';
+                          return 'Passwords do not match';
                         }
                       },
                     }}

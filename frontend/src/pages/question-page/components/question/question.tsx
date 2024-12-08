@@ -1,24 +1,30 @@
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { Dot } from 'lucide-react';
 import { QuestionProps } from '@/pages/question-page/components/question/question.types';
 import useFormattedDate from '@/custom-hooks/use-formatted-date';
+import { Link } from 'react-router-dom';
 
 const Question: React.FC<QuestionProps> = ({ question, author }) => {
   const { title, description, created_at, tags } = question;
-  const { fullname, rating } = author;
+  const { fullname, rating, id } = author;
 
   const formattedDate = useFormattedDate(created_at);
 
   return (
     <div className='mt-4 space-y-4'>
       <h2 className='text-3xl font-bold'>{title}</h2>
-      <div className='text-sm text-foreground'>
-        <div className='flex items-center gap-1'>
-          {`Posted by ${fullname} on ${formattedDate}`}
-          <Dot className='text-accent-foreground' />
-          <p className='text-muted-foreground'>Rating: {rating}</p>
-        </div>
+      <div>
+        <p className='text-sm text-muted-foreground'>
+          Posted by{' '}
+          <Link
+            className='hover:underline'
+            to={`/profile/${id}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {fullname}
+          </Link>
+          • Rating: {rating} • on {formattedDate}
+        </p>
       </div>
       <Separator />
       <div className='text-justify leading-relaxed'>{description}</div>
