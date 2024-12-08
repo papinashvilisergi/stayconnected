@@ -4,7 +4,6 @@ from rest_framework import serializers
 from ouroverflow.serializers import QuestionSerializer, AnswerSerializer
 from ouroverflow.models import Question
 
-
 class RegisterUserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True,
                                      required=True,

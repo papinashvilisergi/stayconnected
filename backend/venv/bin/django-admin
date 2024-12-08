@@ -1,4 +1,4 @@
-#!/root/stayconnected/backend/venv/bin/python3
+#!/root/stayconnected/Sergi/group14_backend_collab/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
