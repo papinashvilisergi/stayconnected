@@ -17,6 +17,10 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    - name: Add Server to known_hosts
+      run: |
+        ssh-keyscan -H 167.99.138.11 >> ~/.ssh/known_hosts
+
     - name: Sync Project to Server
       run: |
         rsync -avz --exclude 'node_modules' --exclude 'venv' ./ root@167.99.138.11:/root/stayconnected/
